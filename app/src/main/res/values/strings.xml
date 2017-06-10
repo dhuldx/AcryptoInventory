@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -21,7 +20,7 @@
     <string name="action_delete_all_entries">Delete All Crypto</string>
 
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
-    <string name="empty_view_title_text">It\'s a bit creepy here...</string>
+    <string name="empty_view_title_text">It is a bit creepy here</string>
 
     <!-- Subtitle text for the empty view that prompts the user to add a inventory [CHAR LIMIT=50] -->
     <string name="empty_view_subtitle_text">Get started by adding a Crypto</string>
@@ -77,32 +76,11 @@
     <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
     <string name="category_overview">Overview</string>
 
-    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
-    <string name="category_gender">Gender</string>
-
     <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
     <string name="category_measurement">Measurement</string>
 
     <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
     <string name="hint_inventory_name">Bitcoin</string>
-
-    <!-- Text hint for breed field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_inventory_breed">Breed</string>
-
-    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_inventory_weight">Weight</string>
-
-    <!-- Units for weight of the inventory (kilograms) [CHAR LIMIT=5] -->
-    <string name="unit_inventory_weight">kg</string>
-
-    <!-- Label for dropdown menu option if the inventory's gender is unknown [CHAR LIMIT=20] -->
-    <string name="gender_unknown">Unknown</string>
-
-    <!-- Label for dropdown menu option if the inventory is male [CHAR LIMIT=20] -->
-    <string name="gender_male">Male</string>
-
-    <!-- Label for dropdown menu option if the inventory is female [CHAR LIMIT=20] -->
-    <string name="gender_female">Female</string>
 
     <!-- Label for the inventory's breed if the breed is unknown [CHAR LIMIT=20] -->
     <string name="unknown_breed">Unknown breed</string>
@@ -125,6 +103,4 @@
     <string name="unknown_code">Unknown Code</string>
     <string name="order_more">Order</string>
     <string name="err_external_storage_permissions">Need permissions to get a product photo</string>
-
-
 </resources>

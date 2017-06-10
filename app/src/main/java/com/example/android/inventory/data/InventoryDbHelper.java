@@ -45,7 +45,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 + InventoryEntry.COLUMN_CRYPTO_NAME + " TEXT NOT NULL DEFAULT 'ETHERUM', "
                 + InventoryEntry.COLUMN_CRYPTO_CODE + " TEXT, "
                 + InventoryEntry.COLUMN_SUPPLIER + " INTEGER NOT NULL, "
-                + InventoryEntry.COLMUN_PICTURE + " TEXT NOT NULL DEFAULT 'No images', "
+                + InventoryEntry.COLMUN_PICTURE + " TEXT, "
                 + InventoryEntry.COLUMN_INVENTORY + " INTEGER NOT NULL DEFAULT 1, "
                 + InventoryEntry.COLUMN_PRICE + " INTEGER NOT NULL DEFAULT 1, "
                 + InventoryEntry.COLUMN_SALES + " INTEGER "

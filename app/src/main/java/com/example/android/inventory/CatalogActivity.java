@@ -28,7 +28,7 @@ public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
-     * Identifier for the pet data loader
+     * Identifier for the inventory data loader
      */
     private static final int INVENTORY_LOADER = 0;
 
@@ -52,7 +52,7 @@ public class CatalogActivity extends AppCompatActivity implements
             }
         });
 
-        // Find the ListView which will be populated with the pet data
+        // Find the ListView which will be populated with the inventory data
         ListView inventoryListView = (ListView) findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
@@ -71,7 +71,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 // Create new intent to go to {@link EditorActivity}
                 Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
 
-                // Form the content URI that represents the specific pet that was clicked on,
+                // Form the content URI that represents the specific inventory that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link inventoryEntry#CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.inventory/inventory/2"
@@ -81,7 +81,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 // Set the URI on the data field of the intent
                 intent.setData(currentInventoryUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
+                // Launch the {@link EditorActivity} to display the data for the current inventory.
                 startActivity(intent);
             }
         });
@@ -91,11 +91,11 @@ public class CatalogActivity extends AppCompatActivity implements
     }
 
     /**
-     * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
+     * Helper method to insert hardcoded inventory data into the database. For debugging purposes only.
      */
     private void insertInventory() {
         // Create a ContentValues object where column names are the keys,
-        // and Toto's pet attributes are the values.
+        // and Crypto inventory attributes are the values.
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_CRYPTO_NAME, "Bitcoin");
         values.put(InventoryEntry.COLUMN_CRYPTO_CODE, "BTC");
@@ -103,6 +103,7 @@ public class CatalogActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_SUPPLIER, InventoryEntry.SUPPLIER1);
         values.put(InventoryEntry.COLUMN_PRICE, 3675);
         values.put(InventoryEntry.COLUMN_SALES, 0);
+        values.put(InventoryEntry.COLMUN_PICTURE, R.drawable.ic_add);
 
 
         // Insert a new row for Bitcoin into the provider using the ContentResolver.
@@ -117,7 +118,7 @@ public class CatalogActivity extends AppCompatActivity implements
      */
     private void deleteAllInventory() {
         int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from Crypto database");
     }
 
     @Override

@@ -63,9 +63,9 @@ public class EditorActivity extends AppCompatActivity implements
      * Identifier for the inventory data loader
      */
     public static final String TAG = EditorActivity.class.getSimpleName();
-    private static final int EXISTING_INVENTORY_LOADER = 0;
     public static final int PICK_PHOTO_REQUEST = 20;
     public static final int EXTERNAL_STORAGE_REQUEST_PERMISSION_CODE = 21;
+    private static final int EXISTING_INVENTORY_LOADER = 0;
     /**
      * Content URI for the existing inventory (null if it's a new inventory)
      */
@@ -87,7 +87,6 @@ public class EditorActivity extends AppCompatActivity implements
     private ImageButton cUpdate;
 
     private String mCurrentPhotoUri = "no images";
-    private String mOrderEmail;
     private String mOrderProduct = "Bitcoin";
     private int mOrderQuantity = 50;
 
@@ -192,8 +191,8 @@ public class EditorActivity extends AppCompatActivity implements
         } else {
             // Otherwise this is an existing inventory, so change app bar to say "Edit Inventory"
             setTitle(getString(R.string.editor_activity_title_edit_inventory));
-             cOrder.setVisibility(View.VISIBLE);
-             cDelete.setVisibility(View.VISIBLE);
+            cOrder.setVisibility(View.VISIBLE);
+            cDelete.setVisibility(View.VISIBLE);
             // Initialize a loader to read the inventory data from the database
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_INVENTORY_LOADER, null, this);
@@ -251,6 +250,7 @@ public class EditorActivity extends AppCompatActivity implements
         String inventoryString = mInventory.getText().toString().trim();
         String priceString = mCryptoPrice.getText().toString().trim();
         String sellString = mCryptoSold.getText().toString().trim();
+        String picString = mCurrentPhotoUri;
 
 
         // Check if this is supposed to be a new inventory
@@ -273,6 +273,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_PRICE, priceString);
         values.put(InventoryEntry.COLUMN_SALES, sellString);
         values.put(InventoryEntry.COLUMN_SUPPLIER, mSupplier);
+        values.put(InventoryEntry.COLMUN_PICTURE, picString);
         // If the weight is not provided by the user, don't try to parse the string into an
         // integer value. Use 1 by default.
         int inventory = 1;
@@ -383,6 +384,7 @@ public class EditorActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void onPhotoUpdate(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //We are on M or above so we need to ask for runtime permissions
@@ -427,6 +429,7 @@ public class EditorActivity extends AppCompatActivity implements
         // we will invoke this activity, and get something back from it.
         startActivityForResult(photoPickerIntent, PICK_PHOTO_REQUEST);
     }
+
     /**
      * This method is called when the back button is pressed.
      */
@@ -437,7 +440,7 @@ public class EditorActivity extends AppCompatActivity implements
                 //If we are here, everything processed successfully and we have an Uri data
                 Uri mProductPhotoUri = data.getData();
                 mCurrentPhotoUri = mProductPhotoUri.toString();
-              //  Log.d(TAG, "Selected images " + mProductPhotoUri);
+                //  Log.d(TAG, "Selected images " + mProductPhotoUri);
 
                 //We use Glide to import photo images
                 Glide.with(this).load(mCurrentPhotoUri)
@@ -506,7 +509,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Proceed with moving to the first row of the cursor and reading data from it
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
-            // Find the columns of inventory attributes that we're interested in
+
             int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_CRYPTO_NAME);
             int codeColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_CRYPTO_CODE);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER);
@@ -523,6 +526,13 @@ public class EditorActivity extends AppCompatActivity implements
             int price = cursor.getInt(priceColumnIndex);
             int sell = cursor.getInt(sellColumnIndex);
             String photo = cursor.getString(picColumnIndex);
+            mCurrentPhotoUri = cursor.getString(picColumnIndex);
+            //Update photo using Glide
+
+            // mSudoEmail = "orders@" + supplier + ".com";
+            // mSudoProduct = name;
+            // Extract out the value from the Cursor for the given column index
+
             mCurrentPhotoUri = cursor.getString(picColumnIndex);
             //Update photo using Glide
             Glide.with(this).load(mCurrentPhotoUri)
