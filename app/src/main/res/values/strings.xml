@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <!-- Name for the application [CHAR LIMIT=12] -->
+    <string name="app_name">Acrypto</string>
+
+    <!-- Label for overflow menu option that inserts fake inventory data into the app [CHAR LIMIT=20] -->
+    <string name="action_insert_dummy_data">Insert Dummy Crypto</string>
+
+    <!-- Label for overflow menu option that deletes all inventory data in the app [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Crypto</string>
+
+    <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit creepy here...</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a inventory [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a Crypto</string>
+
+    <!-- Title for the activity to add a new inventory [CHAR LIMIT=20] -->
+    <string name="editor_activity_title_new_inventory">Add Crypto</string>
+
+    <!-- Title for the activity to edit an existing inventory [CHAR LIMIT=20] -->
+    <string name="editor_activity_title_edit_inventory">Edit Inventory</string>
+
+    <!-- Label for editor menu option to save inventory and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current inventory [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+    <!-- Toast message in editor when new inventory has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_inventory_successful">Crypto saved</string>
+
+    <!-- Toast message in editor when new inventory has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_inventory_failed">Error with saving Crypto</string>
+
+    <!-- Toast message in editor when current inventory was successfully updated [CHAR LIMIT=NONE] -->
+    <string name="editor_update_inventory_successful">Crypto updated</string>
+
+    <!-- Toast message in editor when current inventory has failed to be updated [CHAR LIMIT=NONE] -->
+    <string name="editor_update_inventory_failed">Error with updating Crypto</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current inventory [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
+    <!-- Toast message in editor when current inventory was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_inventory_successful">Crypto deleted</string>
+
+    <!-- Toast message in editor when current inventory has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_inventory_failed">Error with deleting Crypto</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current inventory [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_msg">Delete this Crypto?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current inventory [CHAR LIMIT=20] -->
+    <string name="delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current inventory [CHAR LIMIT=20] -->
+    <string name="cancel">Cancel</string>
+
+    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="category_overview">Overview</string>
+
+    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
+    <string name="category_gender">Gender</string>
+
+    <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
+    <string name="category_measurement">Measurement</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_inventory_name">Bitcoin</string>
+
+    <!-- Text hint for breed field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_inventory_breed">Breed</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_inventory_weight">Weight</string>
+
+    <!-- Units for weight of the inventory (kilograms) [CHAR LIMIT=5] -->
+    <string name="unit_inventory_weight">kg</string>
+
+    <!-- Label for dropdown menu option if the inventory's gender is unknown [CHAR LIMIT=20] -->
+    <string name="gender_unknown">Unknown</string>
+
+    <!-- Label for dropdown menu option if the inventory is male [CHAR LIMIT=20] -->
+    <string name="gender_male">Male</string>
+
+    <!-- Label for dropdown menu option if the inventory is female [CHAR LIMIT=20] -->
+    <string name="gender_female">Female</string>
+
+    <!-- Label for the inventory's breed if the breed is unknown [CHAR LIMIT=20] -->
+    <string name="unknown_breed">Unknown breed</string>
+    <string name="hint_inventory">112345678</string>
+    <string name="category_supplier">Supplier</string>
+    <string name="hint_price">1234</string>
+    <string name="unit_inventory_price">$</string>
+    <string name="Price">Price</string>
+    <string name="supplier1">BTCmarkets</string>
+    <string name="supplier2">Coinspot</string>
+    <string name="supplier3">Coinbase</string>
+    <string name="hint_Desc">Desc</string>
+    <string name="category_product">CryptoName</string>
+    <string name="start_trade">Let start Trading</string>
+    <string name="click_photo_to_update">Click Photo</string>
+    <string name="set_inventory">Inventory</string>
+    <string name="set_product_sales">Sell</string>
+    <string name="hint_sale">1234</string>
+    <string name="hint_code">BTC</string>
+    <string name="unknown_code">Unknown Code</string>
+    <string name="order_more">Order</string>
+    <string name="err_external_storage_permissions">Need permissions to get a product photo</string>
+
+
+</resources>
