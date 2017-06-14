@@ -52,6 +52,7 @@ import java.io.File;
 
 import static com.example.android.inventory.R.drawable.ic_default_home;
 import static com.example.android.inventory.R.drawable.ic_insert_placeholder;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.COLUMN_CRYPTO_NAME;
 
 /**
  * Allows user to create a new inventory or edit an existing one.
@@ -87,8 +88,9 @@ public class EditorActivity extends AppCompatActivity implements
     private ImageButton cUpdate;
 
     private String mCurrentPhotoUri = "no images";
-    private String mOrderProduct = "Bitcoin";
-    private int mOrderQuantity = 50;
+    private String mOrderProduct;
+    private String mOrderEmail;
+    private int mOrderQuantity;
 
 
     /**
@@ -243,79 +245,61 @@ public class EditorActivity extends AppCompatActivity implements
      * Get user input from editor and save inventory into database.
      */
     private void saveInventory() {
-        // Read from input fields
-        // Use trim to eliminate leading or trailing white space
+        //Read Values from text field
         String nameString = mCryptoName.getText().toString().trim();
-        String codeString = mCryptoCode.getText().toString().trim();
-        String inventoryString = mInventory.getText().toString().trim();
+        String descriptionString = mCryptoCode.getText().toString().trim();
+        String inventoryString = mInventory.getText().toString().toString();
+        String salesString = mCryptoSold.getText().toString().trim();
         String priceString = mCryptoPrice.getText().toString().trim();
-        String sellString = mCryptoSold.getText().toString().trim();
-        String picString = mCurrentPhotoUri;
 
 
-        // Check if this is supposed to be a new inventory
-        // and check if all the fields in the editor are blank
-        if (mCurrentCryptoUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(codeString) &&
-                TextUtils.isEmpty(inventoryString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(sellString) && mSupplier == InventoryEntry.SUPPLIER1) {
-            // Since no fields were modified, we can return early without creating a new inventory.
-            // No need to create ContentValues and no need to do any ContentProvider operations.
+        //Check if is new or if an update
+        if (mCurrentCryptoUri == null && TextUtils.isEmpty(nameString) || TextUtils.isEmpty(descriptionString)
+                || TextUtils.isEmpty(inventoryString) || TextUtils.isEmpty(salesString)
+                || TextUtils.isEmpty(priceString)) {
+
+            Toast.makeText(this, R.string.err_missing_textfields, Toast.LENGTH_SHORT).show();
+            // No change has been made so we can return
             return;
         }
 
-        // Create a ContentValues object where column names are the keys,
-        // and inventory attributes from the editor are the values.
+        //We set values for insert update
         ContentValues values = new ContentValues();
+
         values.put(InventoryEntry.COLUMN_CRYPTO_NAME, nameString);
-        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, codeString);
+        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, descriptionString);
         values.put(InventoryEntry.COLUMN_INVENTORY, inventoryString);
+        values.put(InventoryEntry.COLUMN_SALES, salesString);
         values.put(InventoryEntry.COLUMN_PRICE, priceString);
-        values.put(InventoryEntry.COLUMN_SALES, sellString);
         values.put(InventoryEntry.COLUMN_SUPPLIER, mSupplier);
-        values.put(InventoryEntry.COLMUN_PICTURE, picString);
-        // If the weight is not provided by the user, don't try to parse the string into an
-        // integer value. Use 1 by default.
-        int inventory = 1;
-        if (!TextUtils.isEmpty(inventoryString)) {
-            inventory = Integer.parseInt(inventoryString);
-        }
-        values.put(InventoryEntry.COLUMN_INVENTORY, inventory);
+        values.put(InventoryEntry.COLMUN_PICTURE, mCurrentPhotoUri);
 
-        // Determine if this is a new or existing inventory by checking if mCurrentInventoryUri is null or not
         if (mCurrentCryptoUri == null) {
-            // This is a NEW inventory, so insert a new inventory into the provider,
-            // returning the content URI for the new inventory.
-            Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
-            // Show a toast message depending on whether or not the insertion was successful.
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_inventory_failed),
-                        Toast.LENGTH_SHORT).show();
+            Uri insertedRow = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
+
+            if (insertedRow == null) {
+                Toast.makeText(this, R.string.editor_insert_inventory_failed, Toast.LENGTH_LONG).show();
             } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_inventory_successful),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_insert_inventory_successful, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, CatalogActivity.class);
+                startActivity(intent);
             }
         } else {
-            // Otherwise this is an EXISTING inventory, so update the inventory with content URI: mCurrentInventoryUri
-            // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentInventoryUri will already identify the correct row in the database that
-            // we want to modify.
-            int rowsAffected = getContentResolver().update(mCurrentCryptoUri, values, null, null);
+            // We are Updating
+            int rowUpdated = getContentResolver().update(mCurrentCryptoUri, values, null, null);
 
-            // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_inventory_failed),
-                        Toast.LENGTH_SHORT).show();
+            if (rowUpdated == 0) {
+                Toast.makeText(this, R.string.editor_update_inventory_failed, Toast.LENGTH_LONG).show();
             } else {
-                // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_inventory_successful),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.editor_update_inventory_successful, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, CatalogActivity.class);
+                startActivity(intent);
+
             }
+
         }
+
     }
 
     @Override
@@ -481,7 +465,7 @@ public class EditorActivity extends AppCompatActivity implements
         // all columns from the inventory table
         String[] projection = {
                 InventoryEntry._ID,
-                InventoryEntry.COLUMN_CRYPTO_NAME,
+                COLUMN_CRYPTO_NAME,
                 InventoryEntry.COLUMN_CRYPTO_CODE,
                 InventoryEntry.COLUMN_SUPPLIER,
                 InventoryEntry.COLUMN_INVENTORY,
@@ -510,7 +494,7 @@ public class EditorActivity extends AppCompatActivity implements
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
 
-            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_CRYPTO_NAME);
+            int nameColumnIndex = cursor.getColumnIndex(COLUMN_CRYPTO_NAME);
             int codeColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_CRYPTO_CODE);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER);
             int inventoryColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY);
@@ -529,8 +513,6 @@ public class EditorActivity extends AppCompatActivity implements
             mCurrentPhotoUri = cursor.getString(picColumnIndex);
             //Update photo using Glide
 
-            // mSudoEmail = "orders@" + supplier + ".com";
-            // mSudoProduct = name;
             // Extract out the value from the Cursor for the given column index
 
             mCurrentPhotoUri = cursor.getString(picColumnIndex);
@@ -562,6 +544,9 @@ public class EditorActivity extends AppCompatActivity implements
                     mSupplierSpinner.setSelection(0);
                     break;
             }
+
+            mOrderProduct = name;
+            mOrderQuantity = sell;
         }
     }
 
@@ -657,6 +642,7 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
 
+        // Close the activity
         // Close the activity
         finish();
     }

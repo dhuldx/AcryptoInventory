@@ -103,4 +103,5 @@
     <string name="unknown_code">Unknown Code</string>
     <string name="order_more">Order</string>
     <string name="err_external_storage_permissions">Need permissions to get a product photo</string>
+    <string name="err_missing_textfields">Please Enter all the fields</string>
 </resources>
