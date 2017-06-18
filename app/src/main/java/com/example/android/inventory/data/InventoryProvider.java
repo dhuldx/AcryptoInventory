@@ -135,17 +135,6 @@ public class InventoryProvider extends ContentProvider {
     private Uri insertInventory(Uri uri, ContentValues values) {
 
 
-        // Check that the name is not null
-        String name = values.getAsString(InventoryEntry.COLUMN_CRYPTO_NAME);
-        if (name == null) {
-            throw new IllegalArgumentException("Product requires a name");
-        }
-
-        // Check that the inventory is valid
-        Integer supplier = values.getAsInteger(InventoryEntry.COLUMN_SUPPLIER);
-
-
-// If the weight is provided, check that it's greater than or equal to 0 kg
         Float bal = values.getAsFloat(InventoryEntry.COLUMN_INVENTORY);
         if (bal != null && bal < 0) {
             throw new IllegalArgumentException("product requires valid bal");
@@ -202,12 +191,12 @@ public class InventoryProvider extends ContentProvider {
     private int updateInventory(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If the {@link InventoryEntry#COLUMN_INVENTORY_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(InventoryEntry.COLUMN_CRYPTO_NAME)) {
-            String name = values.getAsString(InventoryEntry.COLUMN_CRYPTO_NAME);
-            if (name == null) {
-                throw new IllegalArgumentException("Product requires a name");
-            }
-        }
+//        if (values.containsKey(InventoryEntry.COLUMN_CRYPTO_NAME)) {
+//            String name = values.getAsString(InventoryEntry.COLUMN_CRYPTO_NAME);
+//            if (name == null) {
+//                throw new IllegalArgumentException("Product requires a name");
+//            }
+//        }
 
         // If the {@link InventoryEntry#COLUMN_INVENTORY_GENDER} key is present,
         // check that the gender value is valid.

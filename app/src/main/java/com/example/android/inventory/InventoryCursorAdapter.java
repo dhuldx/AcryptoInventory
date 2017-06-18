@@ -6,7 +6,10 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.icu.text.DecimalFormat;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
 import static android.content.ContentValues.TAG;
-import static com.example.android.inventory.R.drawable.ic_insert_placeholder;
 
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
@@ -32,6 +33,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
 
     private Context mContext;
+    private Object cryptoCode;
 
     /**
      * Constructs a new {@link InventoryCursorAdapter}.
@@ -68,6 +70,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
      * @param cursor  The cursor from which to get the data. The cursor is already moved to the
      *                correct row.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
@@ -76,6 +79,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView inventoryTextView = (TextView) view.findViewById(R.id.inventory);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         TextView sellTextView = (TextView) view.findViewById(R.id.sold);
+        TextView valueTextView = (TextView) view.findViewById(R.id.stockValue);
         ImageView picView = (ImageView) view.findViewById(R.id.image);
         ImageView sellCrypto = (ImageView) view.findViewById(R.id.sale_product);
 
@@ -85,54 +89,63 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int inventoryColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRICE);
         int sellColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SALES);
+        int valueColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY);
         int picColumnIndex = cursor.getColumnIndex(InventoryEntry.COLMUN_PICTURE);
 
         // Read the inventory attributes from the Cursor for the current inventory
         int id = cursor.getInt(cursor.getColumnIndex(InventoryEntry._ID));
-        final String inventoryName = cursor.getString(nameColumnIndex);
+        String inventoryName = cursor.getString(nameColumnIndex);
         String inventoryCode = cursor.getString(codeColumnIndex);
-        final int inventoryBal = cursor.getInt(inventoryColumnIndex);
-        String inventoryPrice = "$" + cursor.getString(priceColumnIndex);
-        final int inventorySold = cursor.getInt(sellColumnIndex);
-        Uri picUri = Uri.parse(cursor.getString(picColumnIndex));
-        // If the inventory breed is empty string or null, then use some default text
-        // that says "Unknown breed", so the TextView isn't blank.
+        final double inventoryBal = cursor.getDouble(inventoryColumnIndex);
+        double inventoryPrice = cursor.getDouble(priceColumnIndex);
+        final double valueAmt = cursor.getDouble(valueColumnIndex);
+        double valueTotal = valueAmt * inventoryPrice;
+        DecimalFormat REAL_FORMATTER = new DecimalFormat("$0.##");
+        DecimalFormat CRYPTO_FORMATTER = new DecimalFormat("0.########");
+
+        final String inventorySold = cursor.getString(sellColumnIndex);
+        //   Uri picUri = Uri.parse(cursor.getString(picColumnIndex));
+        // If the inventory  is empty string or null, then use some default text
+        // that says "", so the TextView isn't blank.
         if (TextUtils.isEmpty(inventoryCode)) {
             inventoryCode = context.getString(R.string.unknown_code);
         }
 
-
-        String cryptoQuantity = String.valueOf(inventoryBal) + " SOH";
-        String cryptoSold = String.valueOf(inventorySold) + " Sold";
+        //    String cryptoQuantity = String.valueOf(inventoryBal);
+        String cryptoSold = String.valueOf(inventorySold);
+        //  String cryptoPrice = "$"+String.valueOf(inventoryPrice);
+        //   String cryptoValue = String.valueOf(valueTotal);
         // Update the TextViews with the attributes for the current inventory
         nameTextView.setText(inventoryName);
         codeTextView.setText(inventoryCode);
-        inventoryTextView.setText(cryptoQuantity);
-        priceTextView.setText(inventoryPrice);
+        inventoryTextView.setText(CRYPTO_FORMATTER.format(inventoryBal));
+        priceTextView.setText(REAL_FORMATTER.format(inventoryPrice));
         sellTextView.setText(cryptoSold);
+        valueTextView.setText(REAL_FORMATTER.format(valueTotal));
+        // valueTextView.setText(cryptoValue);
         final Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
 
-        Log.d(TAG, "genero Uri: " + currentProductUri + " Product name: " + inventoryName + " id: " + id);
+        Log.d(TAG, "genero Uri: " + currentProductUri + " Product name: " + inventoryCode + " id: " + id);
 
-//We use Glide to import photo images
+/*//We use Glide to import photo images
         Glide.with(context).load(picUri)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(ic_insert_placeholder)
+                .placeholder(R.drawable.ic_add)
+                .error(ic_add_black_24dp)
                 .crossFade()
                 .centerCrop()
-                .into(picView);
+                .into(picView);*/
 
 
         sellCrypto.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Log.d(TAG, inventoryName + " quantity= " + inventoryBal);
+                int i = Log.d(TAG, " quantity= " + inventoryBal);
                 ContentResolver resolver = view.getContext().getContentResolver();
                 ContentValues values = new ContentValues();
                 if (inventoryBal > 0) {
-                    int bal = inventoryBal;
-                    int sold = inventorySold;
+                    double bal = inventoryBal;
+                    double sold = Double.parseDouble(inventorySold);
                     Log.d(TAG, "new quabtity= " + bal);
                     values.put(InventoryEntry.COLUMN_INVENTORY, --bal);
                     values.put(InventoryEntry.COLUMN_SALES, ++sold);

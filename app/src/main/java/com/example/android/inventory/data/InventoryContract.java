@@ -2,7 +2,6 @@
 package com.example.android.inventory.data;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -56,32 +55,38 @@ public final class InventoryContract {
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_CRYPTO_NAME = "crypto";
-        public final static String COLUMN_CRYPTO_CODE = "description";
+        public final static String COLUMN_CRYPTO_CODE = "code";
         public final static String COLUMN_SUPPLIER = "supplier";
         public final static String COLUMN_INVENTORY = "inventory";
         public final static String COLUMN_SALES = "sales";
         public final static String COLUMN_PRICE = "price";
         public final static String COLMUN_PICTURE = "picture";
 
+
+        // Possible values for the crypto
+        public static final String CRYPTO1 = "DCRYPTO";
+        public static final String CRYPTO2 = "BITCOIN";
+        public static final String CRYPTO3 = "ETHERUM";
+        public static final String CRYPTO4 = "RIPPLE";
+        public static final String CRYPTO5 = "LITECOIN";
+
+        // Possible values for the cryptoCode
+        public static final String CRYPTOCODE1 = "DCR";
+        public static final String CRYPTOCODE2 = "BTC";
+        public static final String CRYPTOCODE3 = "ETH";
+        public static final String CRYPTOCODE4 = "XRP";
+        public static final String CRYPTOCODE5 = "LTC";
+
+
+
         // Possible values for the supplier of the products.
         public static final int SUPPLIER1 = 0;
         public static final int SUPPLIER2 = 1;
         public static final int SUPPLIER3 = 2;
 
-        /**
-         * Returns whether or not the given gender is {@link #SUPPLIER1}, {@link #SUPPLIER2},
-         * or {@link #SUPPLIER3}.
-         */
-        public static boolean isValidGender(int supplier) {
-            if (supplier == SUPPLIER1 || supplier == SUPPLIER2 || supplier == SUPPLIER3) {
-                return true;
-            }
-            return false;
-        }
-
-        public static Uri buildInventoryURI(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
+//        public static Uri buildInventoryURI(long id) {
+//            return ContentUris.withAppendedId(CONTENT_URI, id);
+//        }
     }
 
 }

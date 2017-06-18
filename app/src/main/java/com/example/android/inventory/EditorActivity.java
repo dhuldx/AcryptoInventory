@@ -15,7 +15,6 @@
  */
 package com.example.android.inventory;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -23,13 +22,10 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -45,14 +41,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.android.inventory.data.InventoryContract.InventoryEntry;
 
-import java.io.File;
+import java.text.NumberFormat;
 
-import static com.example.android.inventory.R.drawable.ic_default_home;
-import static com.example.android.inventory.R.drawable.ic_insert_placeholder;
 import static com.example.android.inventory.data.InventoryContract.InventoryEntry.COLUMN_CRYPTO_NAME;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTO2;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTOCODE1;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTOCODE2;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTOCODE3;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTOCODE4;
+import static com.example.android.inventory.data.InventoryContract.InventoryEntry.CRYPTOCODE5;
 
 /**
  * Allows user to create a new inventory or edit an existing one.
@@ -75,9 +74,9 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * EditText field to enter the inventory's name
      */
-    private EditText mCryptoName;
+    private Spinner mCryptoSpinner;
     private ImageView mCryptoIcon;
-    private EditText mCryptoCode;
+
     private Spinner mSupplierSpinner;
     private EditText mInventory;
     private EditText mCryptoPrice;
@@ -98,7 +97,12 @@ public class EditorActivity extends AppCompatActivity implements
      * {@link InventoryEntry#SUPPLIER1}, {@link InventoryEntry#SUPPLIER2}, or
      * {@link InventoryEntry#SUPPLIER3}.
      */
-    private int mSupplier = InventoryEntry.SUPPLIER1;
+    private int mSupplier;
+
+    private String mCrypto;
+    private String mCryptoCode;
+    private Image mCryptoLogo;
+
 
     /**
      * Boolean flag that keeps track of whether the inventory has been edited (true) or not (false)
@@ -123,23 +127,22 @@ public class EditorActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_editor);
 
         //Cast UI
-        mCryptoName = (EditText) findViewById(R.id.edit_inventory_name);
-        mCryptoIcon = (ImageView) findViewById(R.id.image_product_photo);
-        mCryptoCode = (EditText) findViewById(R.id.edit_code);
+        mCryptoSpinner = (Spinner) findViewById(R.id.spinner_crypto);
         mSupplierSpinner = (Spinner) findViewById(R.id.spinner_supplier);
         mInventory = (EditText) findViewById(R.id.edit_inventory);
         mCryptoPrice = (EditText) findViewById(R.id.edit_inventory_price);
         mCryptoSold = (EditText) findViewById(R.id.edit_product_sale);
 
         //monitor activity so we can protect user
-        mCryptoName.setOnTouchListener(mTouchListener);
-        mCryptoIcon.setOnTouchListener(mTouchListener);
-        mCryptoCode.setOnTouchListener(mTouchListener);
+        mCryptoSpinner.setOnTouchListener(mTouchListener);
         mInventory.setOnTouchListener(mTouchListener);
         mCryptoPrice.setOnTouchListener(mTouchListener);
         mCryptoSold.setOnTouchListener(mTouchListener);
         mSupplierSpinner.setOnTouchListener(mTouchListener);
-        setupSpinner();
+
+        setSpinner();
+        setCryptoSpinner();
+        //setSupplierSpinner();
 
         //Cast ActionButtons
         cDelete = (ImageButton) findViewById(R.id.delete);
@@ -164,13 +167,6 @@ public class EditorActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 orderSupplier();
-            }
-        });
-        //Make the photo click listener to update itself
-        mCryptoIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onPhotoUpdate(view);
             }
         });
 
@@ -202,21 +198,69 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
 
+    private void setCryptoSpinner() {
+        // Create adapter for spinner. The list options are from the String array it will use
+        // the spinner will use the default layout
+        ArrayAdapter cryptoSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.array_crypto_options, android.R.layout.simple_spinner_item);
+
+        cryptoSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+
+        // Apply the adapter to the spinner
+        mCryptoSpinner.setAdapter(cryptoSpinnerAdapter);
+
+        // Set the integer mSelected to the constant values
+        mCryptoSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String provide = (String) parent.getItemAtPosition(position);
+                if (!TextUtils.isEmpty(provide)) {
+                    if (provide.equals(getString(R.string.crypto2))) {
+                        mCrypto = CRYPTO2;
+                        mCryptoCode = CRYPTOCODE2;
+
+                    } else if (provide.equals(getString(R.string.crypto3))) {
+                        mCrypto = InventoryEntry.CRYPTO3;
+                        mCryptoCode = CRYPTOCODE3;
+                    } else if (provide.equals(getString(R.string.crypto4))) {
+                        mCrypto = InventoryEntry.CRYPTO4;
+                        mCryptoCode = CRYPTOCODE4;
+                    } else if (provide.equals(getString(R.string.crypto5))) {
+                        mCrypto = InventoryEntry.CRYPTO5;
+                        mCryptoCode = CRYPTOCODE5;
+                    } else {
+                        mCrypto = InventoryEntry.CRYPTO1;
+                        mCryptoCode = CRYPTOCODE1;
+                    }
+                }
+            }
+
+            // Because AdapterView is an abstract class, onNothingSelected must be defined
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mCrypto = InventoryEntry.CRYPTO1;
+                mCryptoCode = CRYPTOCODE1;
+            }
+        });
+
+    }
+
     /**
      * Setup the dropdown spinner that allows the user to select the gender of the inventory.
      */
-    private void setupSpinner() {
+    private void setSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
         ArrayAdapter supplierSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_supplier_options, android.R.layout.simple_spinner_item);
+
 
         // Specify dropdown layout style - simple list view with 1 item per line
         supplierSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         // Apply the adapter to the spinner
         mSupplierSpinner.setAdapter(supplierSpinnerAdapter);
-
         // Set the integer mSelected to the constant values
         mSupplierSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -239,6 +283,7 @@ public class EditorActivity extends AppCompatActivity implements
                 mSupplier = InventoryEntry.SUPPLIER1;
             }
         });
+
     }
 
     /**
@@ -246,17 +291,17 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void saveInventory() {
         //Read Values from text field
-        String nameString = mCryptoName.getText().toString().trim();
-        String descriptionString = mCryptoCode.getText().toString().trim();
-        String inventoryString = mInventory.getText().toString().toString();
+        String nameString = mCrypto;
+        String codeString = mCryptoCode;
+        Image logoPic = mCryptoLogo;
+        String inventoryString = mInventory.getText().toString().trim();
         String salesString = mCryptoSold.getText().toString().trim();
         String priceString = mCryptoPrice.getText().toString().trim();
 
 
         //Check if is new or if an update
-        if (mCurrentCryptoUri == null && TextUtils.isEmpty(nameString) || TextUtils.isEmpty(descriptionString)
-                || TextUtils.isEmpty(inventoryString) || TextUtils.isEmpty(salesString)
-                || TextUtils.isEmpty(priceString)) {
+        if (mCurrentCryptoUri == null && TextUtils.isEmpty(nameString)
+                || TextUtils.isEmpty(inventoryString) || TextUtils.isEmpty(salesString) || TextUtils.isEmpty(priceString)) {
 
             Toast.makeText(this, R.string.err_missing_textfields, Toast.LENGTH_SHORT).show();
             // No change has been made so we can return
@@ -266,13 +311,13 @@ public class EditorActivity extends AppCompatActivity implements
         //We set values for insert update
         ContentValues values = new ContentValues();
 
-        values.put(InventoryEntry.COLUMN_CRYPTO_NAME, nameString);
-        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, descriptionString);
+        values.put(InventoryEntry.COLUMN_CRYPTO_NAME, mCrypto);
+        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, codeString);
         values.put(InventoryEntry.COLUMN_INVENTORY, inventoryString);
         values.put(InventoryEntry.COLUMN_SALES, salesString);
         values.put(InventoryEntry.COLUMN_PRICE, priceString);
         values.put(InventoryEntry.COLUMN_SUPPLIER, mSupplier);
-        values.put(InventoryEntry.COLMUN_PICTURE, mCurrentPhotoUri);
+        values.put(InventoryEntry.COLMUN_PICTURE, String.valueOf(mCryptoLogo));
 
         if (mCurrentCryptoUri == null) {
 
@@ -369,7 +414,7 @@ public class EditorActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    public void onPhotoUpdate(View view) {
+   /* public void onPhotoUpdate(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //We are on M or above so we need to ask for runtime permissions
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -408,15 +453,17 @@ public class EditorActivity extends AppCompatActivity implements
         Uri data = Uri.parse(pictureDirectoryPath);
 
         // set the data and type.  Get all image types.
-        photoPickerIntent.setDataAndType(data, "image/*");
+        photoPickerIntent.setDataAndType(data, "image*//*");
 
         // we will invoke this activity, and get something back from it.
         startActivityForResult(photoPickerIntent, PICK_PHOTO_REQUEST);
     }
+*/
 
     /**
      * This method is called when the back button is pressed.
      */
+/*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_PHOTO_REQUEST && resultCode == RESULT_OK) {
@@ -435,7 +482,7 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
-
+*/
     @Override
     public void onBackPressed() {
         // If the inventory hasn't changed, continue with handling back button press
@@ -465,7 +512,7 @@ public class EditorActivity extends AppCompatActivity implements
         // all columns from the inventory table
         String[] projection = {
                 InventoryEntry._ID,
-                COLUMN_CRYPTO_NAME,
+                InventoryEntry.COLUMN_CRYPTO_NAME,
                 InventoryEntry.COLUMN_CRYPTO_CODE,
                 InventoryEntry.COLUMN_SUPPLIER,
                 InventoryEntry.COLUMN_INVENTORY,
@@ -495,40 +542,42 @@ public class EditorActivity extends AppCompatActivity implements
         if (cursor.moveToFirst()) {
 
             int nameColumnIndex = cursor.getColumnIndex(COLUMN_CRYPTO_NAME);
-            int codeColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_CRYPTO_CODE);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER);
             int inventoryColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRICE);
             int sellColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SALES);
-            int picColumnIndex = cursor.getColumnIndex(InventoryEntry.COLMUN_PICTURE);
+            //    int picColumnIndex = cursor.getColumnIndex(InventoryEntry.COLMUN_PICTURE);
 
             // Extract out the value from the Cursor for the given column index
-            String name = cursor.getString(nameColumnIndex);
-            String code = cursor.getString(codeColumnIndex);
+            String crypto = cursor.getString(nameColumnIndex);
+            //   String code = cursor.getString(codeColumnIndex);
             int supplier = cursor.getInt(supplierColumnIndex);
-            int inventory = cursor.getInt(inventoryColumnIndex);
-            int price = cursor.getInt(priceColumnIndex);
-            int sell = cursor.getInt(sellColumnIndex);
-            String photo = cursor.getString(picColumnIndex);
-            mCurrentPhotoUri = cursor.getString(picColumnIndex);
+            double inventory = cursor.getDouble(inventoryColumnIndex);
+            double price = cursor.getDouble(priceColumnIndex);
+            double sell = cursor.getDouble(sellColumnIndex);
+            //    String photo = cursor.getString(picColumnIndex);
+            //   mCurrentPhotoUri = cursor.getString(picColumnIndex);
             //Update photo using Glide
 
             // Extract out the value from the Cursor for the given column index
 
-            mCurrentPhotoUri = cursor.getString(picColumnIndex);
+       /*     mCurrentPhotoUri = cursor.getString(picColumnIndex);
             //Update photo using Glide
             Glide.with(this).load(mCurrentPhotoUri)
                     .placeholder(R.mipmap.ic_launcher)
                     .error(ic_insert_placeholder)
                     .crossFade()
                     .fitCenter()
-                    .into(mCryptoIcon);
+                    .into(mCryptoIcon);*/
             // Update the views on the screen with the values from the database
-            mCryptoName.setText(name);
-            mCryptoCode.setText(code);
-            mInventory.setText(Integer.toString(inventory));
-            mCryptoPrice.setText(Integer.toString(price));
-            mCryptoSold.setText(Integer.toString(sell));
+            // mCryptoName.setText(name);
+            //   mCryptoCode.setText(code);
+            mInventory.setText(String.valueOf(inventory));
+            mCryptoPrice.setText(String.valueOf(price));
+            NumberFormat nm = NumberFormat.getNumberInstance();
+            mCryptoSold.setText(String.valueOf(sell));
+            //mCryptoSold.setText(nm.format(sell));
+            // mCryptoSold.setText(String.valueOf(sell));
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -544,21 +593,39 @@ public class EditorActivity extends AppCompatActivity implements
                     mSupplierSpinner.setSelection(0);
                     break;
             }
+            switch (crypto) {
+                case InventoryEntry.CRYPTO2:
+                    mCryptoSpinner.setSelection(1);
 
-            mOrderProduct = name;
-            mOrderQuantity = sell;
+                    break;
+                case InventoryEntry.CRYPTO3:
+                    mCryptoSpinner.setSelection(2);
+                    break;
+                case InventoryEntry.CRYPTO4:
+                    mCryptoSpinner.setSelection(3);
+                    break;
+                case InventoryEntry.CRYPTO5:
+                    mCryptoSpinner.setSelection(4);
+                    break;
+                default:
+                    mSupplierSpinner.setSelection(0);
+                    break;
+            }
+
+            mOrderProduct = crypto;
+            mOrderQuantity = 50;
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the input fields.
-        mCryptoName.setText("");
-        mCryptoCode.setText("");
+        mCryptoSpinner.setSelection(0);
+        //   mCryptoCode.setText("");
         mInventory.setText("");
         mCryptoPrice.setText("");
         mCryptoSold.setText("");
-        mSupplierSpinner.setSelection(0); // Select "Unknown" gender
+        mSupplierSpinner.setSelection(0);
     }
 
     /**

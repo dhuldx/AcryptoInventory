@@ -97,12 +97,12 @@ public class CatalogActivity extends AppCompatActivity implements
         // Create a ContentValues object where column names are the keys,
         // and Crypto inventory attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_CRYPTO_NAME, "Bitcoin");
-        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, "BTC");
-        values.put(InventoryEntry.COLUMN_INVENTORY, 74);
+        values.put(InventoryEntry.COLUMN_CRYPTO_NAME, InventoryEntry.CRYPTO3);
+        values.put(InventoryEntry.COLUMN_CRYPTO_CODE, InventoryEntry.CRYPTOCODE3);
+        values.put(InventoryEntry.COLUMN_INVENTORY, 74.5555);
         values.put(InventoryEntry.COLUMN_SUPPLIER, InventoryEntry.SUPPLIER1);
-        values.put(InventoryEntry.COLUMN_PRICE, 3675);
-        values.put(InventoryEntry.COLUMN_SALES, 0);
+        values.put(InventoryEntry.COLUMN_PRICE, 3675.56);
+        values.put(InventoryEntry.COLUMN_SALES, 0.43);
         values.put(InventoryEntry.COLMUN_PICTURE, R.drawable.ic_add);
 
 
@@ -152,6 +152,7 @@ public class CatalogActivity extends AppCompatActivity implements
                 InventoryEntry._ID,
                 InventoryEntry.COLMUN_PICTURE,
                 InventoryEntry.COLUMN_CRYPTO_NAME,
+                InventoryEntry.COLUMN_SUPPLIER,
                 InventoryEntry.COLUMN_CRYPTO_CODE,
                 InventoryEntry.COLUMN_INVENTORY,
                 InventoryEntry.COLUMN_PRICE,

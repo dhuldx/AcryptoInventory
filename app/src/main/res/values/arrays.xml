@@ -17,4 +17,15 @@
         <item>@string/supplier2</item>
         <item>@string/supplier3</item>
     </string-array>
+
+    <string-array name="array_crypto_options">
+        <item>@string/crypto1</item>
+        <item>@string/crypto2</item>
+        <item>@string/crypto3</item>
+        <item>@string/crypto4</item>
+        <item>@string/crypto5</item>
+    </string-array>
+
+
+
 </resources>

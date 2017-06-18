@@ -44,50 +44,19 @@
                 android:orientation="vertical"
                 android:paddingLeft="4dp">
 
-                <!-- Name field -->
-                <EditText
-                    android:id="@+id/edit_inventory_name"
-                    style="@style/EditorFieldStyle"
-                    android:hint="@string/hint_inventory_name"
-                    android:inputType="textCapWords" />
+                <Spinner
+                    android:id="@+id/spinner_crypto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="16dp"
+                    android:paddingEnd="16dp"
+                    android:spinnerMode="dropdown" />
 
 
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Overview category -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <!-- Input fields -->
 
-            <ImageView
-                android:id="@+id/image_product_photo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-            <!-- Input fields -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical"
-                android:paddingLeft="4dp">
-
-
-                <!-- Code field -->
-                <EditText
-                    android:id="@+id/edit_code"
-                    style="@style/EditorFieldStyle"
-                    android:hint="@string/hint_code"
-                    android:inputType="textCapWords" />
-            </LinearLayout>
-        </LinearLayout>
         <!-- Supplier category -->
         <LinearLayout
             android:id="@+id/container_supplier"
@@ -113,6 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:paddingRight="16dp"
+                    android:paddingEnd="16dp"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
         </LinearLayout>
@@ -141,7 +111,7 @@
                     android:id="@+id/edit_inventory"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_inventory"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
 
             </RelativeLayout>
@@ -170,7 +140,7 @@
                     android:id="@+id/edit_inventory_price"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_price"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
                 <!-- Units for price ($) -->
                 <TextView
@@ -203,7 +173,7 @@
                     android:id="@+id/edit_product_sale"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_sale"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
             </RelativeLayout>
         </LinearLayout>

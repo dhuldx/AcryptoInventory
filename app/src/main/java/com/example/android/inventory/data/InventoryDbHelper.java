@@ -17,7 +17,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     /**
      * Name of the database file
      */
-    private static final String DATABASE_NAME = "crypto.db";
+    private static final String DATABASE_NAME = "Crypto.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.
@@ -42,13 +42,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_INVENTORY_TABLE = "CREATE TABLE " + InventoryEntry.TABLE_NAME + " ("
                 + InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + InventoryEntry.COLUMN_CRYPTO_NAME + " TEXT NOT NULL DEFAULT 'ETHERUM', "
+                + InventoryEntry.COLUMN_CRYPTO_NAME + " TEXT, "
                 + InventoryEntry.COLUMN_CRYPTO_CODE + " TEXT, "
-                + InventoryEntry.COLUMN_SUPPLIER + " INTEGER NOT NULL, "
+                + InventoryEntry.COLUMN_SUPPLIER + " TEXT, "
                 + InventoryEntry.COLMUN_PICTURE + " TEXT, "
-                + InventoryEntry.COLUMN_INVENTORY + " INTEGER NOT NULL, "
-                + InventoryEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
-                + InventoryEntry.COLUMN_SALES + " INTEGER NOT NULL DEFAULT 0"
+                + InventoryEntry.COLUMN_INVENTORY + " REAL NOT NULL, "
+                + InventoryEntry.COLUMN_PRICE + " REAL NOT NULL, "
+                + InventoryEntry.COLUMN_SALES + " REAL NOT NULL"
                 + ");";
 
         // Execute the SQL statement

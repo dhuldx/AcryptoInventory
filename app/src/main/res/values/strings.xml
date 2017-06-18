@@ -104,4 +104,17 @@
     <string name="order_more">Order</string>
     <string name="err_external_storage_permissions">Need permissions to get a product photo</string>
     <string name="err_missing_textfields">Please Enter all the fields</string>
+    <string name="crypto2">BITCOIN</string>
+    <string name="crypto1">DCRYPTO</string>
+    <string name="crypto3">ETHERUM</string>
+    <string name="crypto5">LITECOIN</string>
+    <string name="crypto4">RIPPLE</string>
+    <string name="cryptoCode2">BITCOIN</string>
+    <string name="cryptoCode1">DCRYPTO</string>
+    <string name="cryptoCode3">ETHERUM</string>
+    <string name="cryptoCode5">LITECOIN</string>
+    <string name="cryptoCode4">RIPPLE</string>
+
+
+
 </resources>
